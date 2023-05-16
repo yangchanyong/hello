@@ -26,6 +26,7 @@ public class TodoService {
     return savedEntity.getTitle();
   }
 
+  // final 키워드를 붙이는 이유 : 객체 불변 강제성을 위해
   public List<TodoEntity> create(final TodoEntity entity) {
     validate(entity);
 
@@ -50,6 +51,8 @@ public class TodoService {
     // ifPresent는 null이 아닐경우 처리해야되는 일을 정의한다.
     // 아래 코드는 title과 done 값만 변경하고 save한다.
     // id가 없으면 insert를, 있으면 update를 하게 만들었다.
+    // 예시로 아래 코드에 setId를 null로 쓰게되면 insert 작업을 한다.
+    // 함축된 코드를 잘 이해해보자
     origin.ifPresent(todo -> {
       todo.setTitle(entity.getTitle());
       todo.setDone(entity.isDone());
@@ -59,6 +62,27 @@ public class TodoService {
     return retrieve(entity.getUserId());
   }
 
+  public List<TodoEntity> delete(final TodoEntity entity) {
+    validate(entity);
+    try {
+      repository.delete(entity);
+    } catch (Exception e) {
+      log.error("error deleting entity", entity.getId(), e);
+      throw new RuntimeException("error deleting entity" + entity.getId());
+    }
+
+    // final Optional<TodoEntity> origin = repository.findById(entity.getId());
+
+    // origin.ifPresent(todo -> {
+    // todo.setTitle(entity.getTitle());
+    // todo.setDone(entity.isDone());
+    // repository.save(todo);
+    // });
+
+    return retrieve(entity.getUserId());
+  }
+
+  // final
   private void validate(final TodoEntity entity) {
     if (entity == null) {
       log.warn("Entity connot be null");
