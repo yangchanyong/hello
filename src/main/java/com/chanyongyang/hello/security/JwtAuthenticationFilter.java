@@ -14,12 +14,14 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Autowired
   private TokenProvider tokenProvider;
@@ -34,11 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userId = tokenProvider.validateAndGetUserId(token);
         log.info("Authenticated userId : {}" + userId);
 
+        // authentication 정보 생성 (설정정보 관여)
         AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null,
             AuthorityUtils.NO_AUTHORITIES);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authenticationToken);
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext(); // context 생성
+        securityContext.setAuthentication(authenticationToken); // token 제작
         SecurityContextHolder.setContext(securityContext);
       }
     } catch (Exception e) {
@@ -52,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Bearer: .... / 난수형태의 토큰값
     log.info("bearerToken : {}", bearerToken);
 
-    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("bearer ")) {
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
       // 토큰이 있으면 리턴
       String token = bearerToken.substring(7);
       log.info("read token {}", token);
