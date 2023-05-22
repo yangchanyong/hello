@@ -33,6 +33,9 @@ dependencies {
 	compileOnly group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.3'
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
+	implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.7.12'
+
 
 
 

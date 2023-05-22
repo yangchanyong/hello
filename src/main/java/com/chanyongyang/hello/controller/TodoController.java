@@ -30,6 +30,9 @@ public class TodoController {
   public ResponseEntity<?> testTodo() {
     List<String> list = new ArrayList<>();
     list.add(service.testService());
+    list.add(service.testService());
+    list.add(service.testService());
+    list.add(service.testService());
     return ResponseEntity.ok().body(ResponseDTO.<String>builder().data(list).build());
   }
 
@@ -72,6 +75,7 @@ public class TodoController {
 
   @DeleteMapping
   public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto) {
+    String str = "1234";
     try {
       String temporaryUserId = "temporary-user";
       TodoEntity entity = TodoDTO.todoEntity(dto);
