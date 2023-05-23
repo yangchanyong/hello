@@ -37,6 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Authenticated userId : {}" + userId);
 
         // authentication 정보 생성 (설정정보 관여)
+        // UsernamePasswordAuthenticationToken의 인자는 차례대로 id, pw, 권한 아래 코드는 id에 userId,
+        // 비밀번호와 권한은 없다.
+        // 없는 권한이라도 꼭 적어줘야 한다.
         AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null,
             AuthorityUtils.NO_AUTHORITIES);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -1,6 +1,8 @@
 package com.chanyongyang.hello.service;
 
+import org.apache.ibatis.ognl.security.UserMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.chanyongyang.hello.model.UserEntity;
@@ -27,8 +29,15 @@ public class UserService {
     return userRepository.save(userEntity);
   }
 
-  public UserEntity getByCredentials(final String username, final String password) {
-    return userRepository.findByUsernameAndPassword(username, password);
+  // 로그인
+  public UserEntity getByCredentials(final String username, final String password, PasswordEncoder encoder) {
+
+    // return userRepository.findByUsernameAndPassword(username, password); 기존코드
+    UserEntity userEntity = userRepository.findByUsername(username);
+    if (userEntity != null && encoder.matches(password, userEntity.getPassword())) {
+      return userEntity;
+    }
+    return null;
   }
 
 }
