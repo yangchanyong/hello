@@ -2,12 +2,11 @@ spring:
   devtools:
     livereload:
       enabled: true
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: SAMPLE
-    password: 1234
-    url: jdbc:mariadb://np.chanyongyang.com:3306/springboot_db
   jpa:
     show-sql: true
+  config:
+    import:
+      - classpath:/application-oauth2.yml
+      - classpath:/application-datasource.yml
 server:
   port: 80
